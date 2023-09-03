@@ -18,10 +18,39 @@ router.post('/', async (req, res) => {
 
 
 
+
+
+// router.get('/', async (req, res) => {
+//     try {
+//         const { category, price } = req.query;
+
+//         if (!category && price === '100') {
+//             const rooms = await Room.find({});
+//             res.status(200).json(rooms);
+//         } else {
+//             const filter = {}
+//             if (category) {
+//                 filter.category = category;
+//             }
+
+//             if (price) {
+//                 const numericPrice = parseFloat(price);
+//                 if (!isNaN(numericPrice)) { // Check if numericPrice is a valid number
+//                     filter.price = { $gt: numericPrice };
+//                 } 
+//             }
+//             console.log(filter)
+//             const rooms = await Room.find(filter);
+//             res.status(200).json(rooms);
+//         }
+//     } catch (error) {
+//         res.status(500).json({ "error": error.message });
+//     }
+// });
 router.get('/', async (req, res) => {
     try {
         const { category, price } = req.query;
-        
+
         if (!category && price === '100') {
             const rooms = await Room.find({});
             res.status(200).json(rooms);
@@ -30,7 +59,7 @@ router.get('/', async (req, res) => {
             if (category) {
                 filter.category = category;
             }
-            
+
             if (price) {
                 const numericPrice = parseFloat(price);
                 if (!isNaN(numericPrice)) { // Check if numericPrice is a valid number
@@ -47,6 +76,58 @@ router.get('/', async (req, res) => {
         res.status(500).json({ "error": error.message });
     }
 });
+
+
+
+
+
+router.get('/', async (req, res) => {
+    try {
+        const { category, price } = req.query;
+        const filter = {}
+
+        if (!category && price === '100') {
+            const rooms = await Room.find({});
+            res.status(200).json(rooms);
+        } else {
+
+            if (category) {
+                filter.category = category;
+            }
+
+            if (price) {
+                const numericPrice = parseFloat(price);
+                if (!isNaN(numericPrice)) { // Check if numericPrice is a valid number
+                    filter.price = { $gt: numericPrice };
+                    const rooms = await Room.find(filter);
+                    res.status(200).json(rooms);
+                } else {
+                    // Handle invalid price here, maybe return an error response
+                }
+            }
+           res.status(200).json("hello world") 
+        }
+
+    } catch (error) {
+        res.status(500).json({ "error": error.message });
+    }
+});
+
+
+// router.get('/', async (req, res) => {
+//     const {  price } = req.query;
+//     let filter = {}
+//     if(!price){
+//         res.status(200).json("data not found");
+//     }
+
+//     const result = Room.find({$gt:+price})
+//     console.log(result)
+//     res.send(200).json(result)
+// })
+
+
+
 
 
 
