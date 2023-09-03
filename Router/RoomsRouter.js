@@ -20,22 +20,20 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const { category, price, inputValue ,badroom} = req.query;
-
-       
+        const { category, price, inputValue, badroom, beds } = req.query;
         const filter = {};
-
         // category filter
         if (category) {
             filter.category = category;
         }
-        
-        // category filter
+        // beds filter
+        if (beds) {
+            filter.Beds = beds;
+        }
+        // badroom filter
         if (badroom) {
             filter.Bedrooms = badroom;
         }
-        
-
         // price filter 
         if (price) {
             const numericPrice = parseFloat(price);
@@ -45,16 +43,13 @@ router.get('/', async (req, res) => {
                 return res.status(400).json({ error: 'Invalid price value' });
             }
         }
-
         // search Implement 
         if (inputValue) {
             // regular expression 
             filter.location = { $regex: new RegExp(inputValue, 'i') };
         }
-
         // filter 
         const rooms = await Room.find(filter);
-
         res.status(200).json(rooms);
     } catch (error) {
         res.status(500).json({ error: error.message });
